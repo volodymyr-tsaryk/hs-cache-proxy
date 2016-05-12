@@ -4,8 +4,8 @@
   "description": "",
   "main": "hs-proxy.js",
   "scripts": {
-    "start" :"node server/hs-proxy.js",
-    "double" :"node server/hs-proxy.double.js",
+    "cache" :"node server/hs-proxy.js",
+    "start" :"node server/hs-proxy.double.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "moro@programmer.net",
