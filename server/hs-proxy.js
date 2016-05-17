@@ -20,6 +20,10 @@ var proxy = httpProxy
     .createProxyServer({timeout: config.proxy.requestTimeout})
     .on('endBody', storeData);
 
+proxy.on('error', function onError(error) {
+    console.error('error', error);
+});
+
 http
     .createServer(proxyRequest)
     .listen(config.proxy.port);
