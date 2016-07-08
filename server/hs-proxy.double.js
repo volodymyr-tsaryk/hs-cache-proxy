@@ -6,17 +6,11 @@ var
     urlUtils = require('url'),
     config = require('./../hs-proxy.double.config.json'),
     express = require('express'),
-    app = express(),
+    fs = require('fs'),
     staticUrlReplace = config.proxy.static.redirect,
     staticInclude = config.proxy.static.include,
     staticExclude = config.proxy.static.exclude,
     staticRemovePrefix = config.proxy.static.removePrefix;
-
-app.use(express.static('client'));
-
-app.listen(config.proxy.uiPort, function () {
-    console.log('server ui has started, port = ' + config.proxy.uiPort);
-});
 
 var staticProxy = httpProxy
     .createProxyServer({
@@ -37,10 +31,16 @@ http
     .listen(config.proxy.port);
 
 function proxyRequest(req, res) {
-    var currentUrl = urlUtils.parse(req.url), pathName = currentUrl.pathname;
+    var currentUrl = urlUtils.parse(req.url);
+    var pathName = currentUrl.path;
 
-    if (match(pathName, staticInclude) && !match(pathName, staticExclude)) {
-        var redirectUrl = redirect(req.url, staticUrlReplace);
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "origin, content-type, accept, x-requested-with, Authorization, X-Scheme, X-CSRFToken");
+
+    if (match(pathName.replace(/[?].+/g, ''), staticInclude) && !match(pathName, staticExclude)) {
+        var redirectUrl = redirect(req.url, staticUrlReplace, req.query);
 
         if (redirectUrl) {
             console.log('proxy redirect ', req.url, '<=>', redirectUrl);
@@ -73,7 +73,7 @@ function match(path, patterns) {
 
     for (var i = patterns.length - 1; i >= 0; i--) {
         if (path.match(new RegExp(patterns[i]))) {
-            result = true;
+            result = patterns[i];
             break;
         }
     }
@@ -89,7 +89,11 @@ function redirect(path, patterns) {
         pattern = patterns[i];
 
         if (path.match(new RegExp(pattern.from))) {
-            result = path.replace(new RegExp(pattern.from), pattern.to);
+            if (~pattern.to.indexOf('http://')) {
+                result = pattern.to + path.replace(pattern.replace ? pattern.replace : '', '/');
+            } else {
+                result = path.replace(new RegExp(pattern.from), pattern.to);
+            }
 
             break;
         }

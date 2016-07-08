@@ -11,10 +11,6 @@ var
     app = express();
 
 app.use(express.static('client'));
-app.listen(3000, function () {
-    console.log('server ui has started, port =' + 3000);
-});
-
 
 var proxy = httpProxy
     .createProxyServer({timeout: config.proxy.requestTimeout})

@@ -2,10 +2,9 @@
   "proxy": {
     "port": 8003,
     "uiPort": 3000,
-
     "static": {
       "target": "http://localhost:8080/",
-      "removePrefix" : "hs/",
+      "removePrefix": "hs/",
       "requestTimeout": 1200000,
       "redirect": [
         {
@@ -15,16 +14,30 @@
         {
           "from": "new-forecast.min.master.+.js",
           "to": "forecast/forecast.config.js"
+        },
+        {
+          "from": ".*update.js$",
+          "replace":"/",
+          "to": "http://localhost:5000"
+        },
+        {
+          "from": ".*update.json$",
+          "replace":"/",
+          "to": "http://localhost:5000"
+        },
+        {
+          "from": "\/apps\/.*[.js|.css|.json]",
+          "replace":"\/apps\/dist\/settings\/js\/",
+          "to": "http://localhost:5000"
         }
       ],
       "exclude": [
         "hotschedules.js"
       ],
       "include": [
-        ".png$|.js$|.cssv$|.woff$|.css$|.jpg$|.gif$|.html$|.ico$|.tpl$|.json$"
+        ".png$|.js$|.cssv$|.woff$|.css$|.jpg$|.gif$|.html$|.ico$|.tpl$|.json$|.woff2$"
       ]
     },
-
     "dynamic": {
       "target": "http://df-testserver4/",
       "requestTimeout": 1200000
