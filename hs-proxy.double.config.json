@@ -29,13 +29,19 @@
           "from": "\/apps\/.*[.js|.css|.json|.woff2|.woff|.ttf]",
           "replace":"\/apps\/dist\/settings\/js\/",
           "to": "http://localhost:5000"
+        },
+        {
+          "from":"\/spring\/i18n\/resources",
+          "replace":"\/",
+          "to" :"http://localhost:6060"
         }
       ],
       "exclude": [
-        "hotschedules.js"
+        "hotschedules.js",
+        "jsp/preload"
       ],
       "include": [
-        ".png$|.js$|.cssv$|.woff$|.css$|.jpg$|.gif$|.html$|.ico$|.tpl$|.json$|.woff2$"
+        ".png$|.js$|.cssv$|.woff$|.css$|i18n\/resources|.svg$|.jpg$|.gif$|.html$|.ttf|.ico$|.tpl$|.json$|.woff2$"
       ]
     },
     "dynamic": {

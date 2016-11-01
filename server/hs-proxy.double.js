@@ -87,7 +87,7 @@ function redirect(path, patterns) {
 
     for (var i = patterns.length - 1; i >= 0; i--) {
         pattern = patterns[i];
-
+        
         if (path.match(new RegExp(pattern.from))) {
             if (~pattern.to.indexOf('http://')) {
                 result = pattern.to + path.replace(pattern.replace ? pattern.replace : '', '/');
