@@ -4,9 +4,9 @@
   "description": "",
   "main": "hs-proxy.js",
   "scripts": {
-    "cache" :"node server/hs-proxy.js",
-    "start" :"node server/hs-proxy.double.js",
-    "start-i18" :"node server/hs-i18-server.js",
+    "cache": "node server/hs-proxy.js",
+    "start": "node server/hs-proxy.double.js",
+    "start-i18": "node server/hs-i18-server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "moro@programmer.net",
@@ -14,7 +14,8 @@
   "dependencies": {
     "express": "^4.13.4",
     "filendir": "^1.0.0",
-    "http-proxy": "git+https://github.com/moro-programmer/node-http-proxy.git"
+    "http-proxy": "git+https://github.com/moro-programmer/node-http-proxy.git",
+    "properties": "^1.2.1"
   },
   "devDependencies": {
     "babel-cli": "^6.7.5",
