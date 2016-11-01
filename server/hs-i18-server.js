@@ -15,7 +15,7 @@ server.get('/hs/spring/i18n/resources', function (req, res) {
   var bundle = req.query.bundle;
 
   if (bundle) {
-    properties.parse(config.resourcesRoot + bundle.replace(/[.]/g, '/') +'_qa.properties',
+    properties.parse(config.resourcesRoot + bundle.replace(/[.]/g, '/') + config.suffix +'.properties',
     { path: true },
     function read(err, data) {
 

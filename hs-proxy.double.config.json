@@ -45,7 +45,7 @@
       ]
     },
     "dynamic": {
-      "target": "http://df-testserver4/",
+      "target": "http://df-testserver3/",
       "requestTimeout": 1200000
     }
   }
