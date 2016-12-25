@@ -6,36 +6,32 @@
       "target": "http://localhost:8080/",
       "removePrefix": "hs/",
       "requestTimeout": 1200000,
-      "redirect": [
-        {
-          "from": "scheduling.min.js",
-          "to": "scheduling/config.js"
-        },
-        {
-          "from": "new-forecast.min.master.+.js",
-          "to": "forecast/forecast.config.js"
-        },
-        {
-          "from": ".*update.js$",
-          "replace":"/",
-          "to": "http://localhost:5000"
-        },
-        {
-          "from": ".*update.json$",
-          "replace":"/",
-          "to": "http://localhost:5000"
-        },
-        {
-          "from": "\/apps\/.*[.js|.css|.json|.woff2|.woff|.ttf]",
-          "replace":"\/apps\/dist\/settings\/js\/",
-          "to": "http://localhost:5000"
-        },
-        {
-          "from":"\/spring\/i18n\/resources",
-          "replace":"\/",
-          "to" :"http://localhost:6060"
-        }
-      ],
+      "redirect": [{
+        "from": "scheduling.min.js",
+        "to": "scheduling/config.js"
+      }, {
+        "from": "new-timeoff-approvals.min.master.+.js",
+        "to": "approve-main.js"
+      }, {
+        "from": "new-forecast.min.master.+.js",
+        "to": "forecast/forecast.config.js"
+      }, {
+        "from": ".*update.js$",
+        "replace": "/",
+        "to": "http://localhost:5000"
+      }, {
+        "from": ".*update.json$",
+        "replace": "/",
+        "to": "http://localhost:5000"
+      }, {
+        "from": "\/apps\/.*[.js|.css|.json|.woff2|.woff|.ttf]",
+        "replace": "\/apps\/dist\/settings\/js\/",
+        "to": "http://localhost:5000"
+      }, {
+        "from": "\/spring\/i18n\/resources",
+        "replace": "\/",
+        "to": "http://localhost:6060"
+      }],
       "exclude": [
         "hotschedules.js",
         "jsp/preload"
@@ -45,7 +41,7 @@
       ]
     },
     "dynamic": {
-      "target": "http://df-testserver3/",
+      "target": "http://df-testserver4/",
       "requestTimeout": 1200000
     }
   }

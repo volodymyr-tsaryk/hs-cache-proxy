@@ -7,6 +7,7 @@
     "cache": "node server/hs-proxy.js",
     "start": "node server/hs-proxy.double.js",
     "start-i18": "node server/hs-i18-server.js",
+    "apimocker": "apimocker -c apimocker/config.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "moro@programmer.net",
