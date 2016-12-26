@@ -1,13 +1,13 @@
 var
-  config = require('./../hs.i18.config.json'),
+  config = require('./../hs.i18.config.js'),
   express = require('express'),
-  properties = require("properties");
+  properties = require('properties');
 
 var server = express();
 
 server.all('/*', function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'X-Requested-With');
   next();
 });
 
@@ -15,7 +15,9 @@ server.get('/hs/spring/i18n/resources', function(req, res) {
   var bundle = req.query.bundle;
 
   if (bundle) {
-    properties.parse(config.resourcesRoot + bundle.replace(/[.]/g, '/') + config.suffix + '.properties', {
+    var bundlePath = config.resourcesRoot + bundle.replace(/[.]/g, '/') + config.suffix + '.properties';
+
+    properties.parse(bundlePath, {
         path: true
       },
       function read(err, data) {
@@ -33,5 +35,5 @@ server.get('/hs/spring/i18n/resources', function(req, res) {
 });
 
 server.listen(config.port, function() {
-  console.log('http i18 server has started on port ' + config.port);
+  console.log('http i18 server has been started on port ' + config.port);
 });

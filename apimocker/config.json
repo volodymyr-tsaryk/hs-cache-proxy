@@ -2,11 +2,12 @@
   "port": "7878",
   "latency": 50,
   "logRequestHeaders": false,
-  "basepath":"/hs",
-  "mockDirectory" : "./apimocker",
+  "basepath": "/hs",
+  "mockDirectory": "./apimocker",
   "allowedDomains": [
     "*"
   ],
+
   "webServices": {
     "spring/client/day-notes": {
       "mockFile": "day-notes.json",

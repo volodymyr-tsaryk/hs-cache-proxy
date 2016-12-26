@@ -1,122 +1,109 @@
 require('./dns-fix');
 
 var
-  http = require('http'),
-  httpProxy = require('http-proxy'),
-  filendir = require('filendir'),
   fs = require('fs'),
+  http = require('http'),
   urlUtils = require('url'),
-  config = require('./../hs-proxy.config.json'),
   express = require('express'),
-  app = express();
+  httpProxy = require('http-proxy'),
+  config = require('./../hs-proxy.config.js'),
+  staticUrlReplace = config.proxy.static.redirect,
+  staticInclude = config.proxy.static.include,
+  staticExclude = config.proxy.static.exclude,
+  staticRemovePrefix = config.proxy.static.removePrefix;
 
-app.use(express.static('client'));
-
-var proxy = httpProxy
+var staticProxy = httpProxy
   .createProxyServer({
-    timeout: config.proxy.requestTimeout
-  })
-  .on('endBody', storeData);
+    timeout: config.proxy.static.requestTimeout
+  });
 
-proxy.on('error', function onError(error) {
-  console.error('error', error);
-});
+staticProxy.on('error', onError);
+
+var dynamicProxy = httpProxy
+  .createProxyServer({
+    timeout: config.proxy.dynamic.requestTimeout
+  });
+
+dynamicProxy.on('error', onError);
 
 http
   .createServer(proxyRequest)
   .listen(config.proxy.port);
 
 function proxyRequest(req, res) {
-  var key = getKey(req),
-    filePath = config.proxy.cachePath + key;
+  var currentUrl = urlUtils.parse(req.url);
+  var pathName = currentUrl.path;
 
-  fs.exists(filePath, function(exists) {
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "origin, content-type, accept, x-requested-with, Authorization, X-Scheme, X-CSRFToken");
 
-    if (exists) {
-      console.log('from cache ', req.url);
+  if (match(pathName.replace(/[?].+/g, ''), staticInclude) && !match(pathName, staticExclude)) {
+    var redirectUrl = redirect(req.url, staticUrlReplace, req.query);
 
-      fs.readFile(filePath, 'utf8', function(err, data) {
-        var json = JSON.parse(data);
+    if (redirectUrl) {
+      console.log('proxy redirect ', req.url, '<=>', redirectUrl);
 
-        if (err) {
-          return console.error(err);
-        }
-
-        Object.keys(json.headers).forEach(function(key) {
-          res.setHeader(key, json.headers[key]);
-        });
-
-        res.statusCode = json.httpStatus;
-
-        if (json.latency) {
-          setTimeout(function() {
-            res.end(toData(res, json.body));
-          }, json.latency);
-        } else {
-          res.end(toData(res, json.body));
-        }
-
+      res.writeHead(302, {
+        'Location': redirectUrl
       });
+
+      res.end();
     } else {
-      console.log('proxy ', req.url);
+      req.url = req.url.replace(new RegExp(staticRemovePrefix), '');
+      console.log('proxy static ', pathName, '<=>', req.url);
 
-      proxy.web(req, res, {
-        target: config.proxy.target
+      staticProxy.web(req, res, {
+        target: config.proxy.static.target
       });
     }
-  });
+  } else {
+    console.log('proxy dynamic', req.url, "<=>", config.proxy.dynamic.target + pathName);
+
+    dynamicProxy.web(req, res, {
+      target: config.proxy.dynamic.target
+    });
+  }
 }
 
-function storeData(req, res, proxyRes, body) {
-  var url = getKey(req),
-    filePath = config.proxy.cachePath + url,
-    currentUrl = urlUtils.parse(req.url);
+function match(path, patterns) {
+  var result = false;
+  patterns = patterns || [];
 
-  fs.exists(filePath, function(exists) {
-    if (!currentUrl.pathname.match(new RegExp(config.proxy.excludeExt)) && !exists) {
-      var data = getData(proxyRes, body);
-
-      filendir.writeFile(filePath, JSON.stringify({
-          headers: proxyRes.headers,
-          httpStatus: res.statusCode,
-          body: data
-        }, null, '\t'),
-        function(err) {
-          if (err) {
-            return console.error(err);
-          }
-        });
+  for (var i = patterns.length - 1; i >= 0; i--) {
+    if (path.match(new RegExp(patterns[i]))) {
+      result = patterns[i];
+      break;
     }
-  });
-}
-
-function toData(res, body) {
-  var contentType = res.getHeader('content-type') || '';
-
-  if (contentType.startsWith('application/json')) {
-    return JSON.stringify(body);
-  } else {
-    return String(body);
   }
+
+  return result;
 }
 
-function getData(res, body) {
-  if (res.headers && (res.headers['content-type'] || '').startsWith('application/json')) {
-    return JSON.parse(body);
-  } else {
-    return body;
+function redirect(path, patterns) {
+  var result, pattern;
+  patterns = patterns || [];
+
+  for (var i = patterns.length - 1; i >= 0; i--) {
+    pattern = patterns[i];
+
+    if (path.match(new RegExp(pattern.from))) {
+      if (~pattern.to.indexOf('http://')) {
+        result = pattern.to + path.replace(pattern.replace ? pattern.replace : '', '/');
+      } else {
+        result = path.replace(new RegExp(pattern.from), pattern.to);
+      }
+
+      break;
+    }
   }
+
+  return result;
 }
 
-function getKey(req) {
-  var cleaners = config.url.cleaners || [],
-    url = req.url;
-
-  cleaners.forEach(function(cleaner) {
-    url = url.replace(new RegExp(cleaner, 'gi'), '');
-  });
-
-  return url;
+function onError(error) {
+  console.error('error', error);
 }
 
-console.log('http proxy server' + ' started ' + 'on port ' + config.proxy.port);
+console.log('http proxy server has been started on port ' + config.proxy.port);
