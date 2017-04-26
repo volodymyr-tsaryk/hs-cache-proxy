@@ -90,13 +90,31 @@ function redirect(path, patterns) {
 
     if (path.match(new RegExp(pattern.from))) {
       if (~pattern.to.indexOf('http://')) {
-        result = pattern.to + path.replace(pattern.replace ? pattern.replace : '', '/');
+        result = pattern.to + '/' + replace(pattern.replace, path);
       } else {
         result = path.replace(new RegExp(pattern.from), pattern.to);
       }
 
       break;
     }
+  }
+
+  return result;
+}
+
+function replace(replace, path) {
+  var result = path;
+
+  if (Array.isArray(replace)) {
+    replace.forEach(function(item){
+        if (typeof item === 'string') {
+          result = result.replace(item, '');
+        } else if (typeof item === 'object'){
+          result = result.replace(item.from, item.to);
+        }
+    });
+  } else if (replace) {
+    result = result.replace(replace, '');
   }
 
   return result;

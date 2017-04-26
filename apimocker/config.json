@@ -1,8 +1,9 @@
 {
   "port": "7878",
-  "latency": 50,
+  "latency": 0,
   "logRequestHeaders": false,
   "basepath": "/hs",
+  "quiet": false,
   "mockDirectory": "./apimocker",
   "allowedDomains": [
     "*"
@@ -11,7 +12,75 @@
   "webServices": {
     "spring/client/day-notes": {
       "mockFile": "day-notes.json",
-      "latency": 0,
+      "verbs": [
+        "get"
+      ]
+    },
+    "api/files/processing/stats/jobs": {
+      "mockFile": "stats.json",
+      "verbs": [
+        "get"
+      ]
+    },
+    "api/files/processing/nodes": {
+      "mockFile": "nodes.json",
+      "verbs": [
+        "get"
+      ]
+    },
+    "api/files/processing/stats/jobs": {
+      "switch": ["state"],
+      "mockFile": "jobs.json",
+      "latency":7000,	
+      "verbs": [
+        "get"
+      ]
+    },
+    "api/files/processing/stats/system": {
+      "switch": ["types"],
+      "mockFile": "events.json",
+      "verbs": [
+        "get"
+      ]
+    },
+    "api/files/processing/stats/system/jobs-per-pool": {
+      "mockFile": "jobs_per_pool.events.json",
+      "verbs": [
+        "get"
+      ]
+    },
+    "api/files/processing/stats/companies/:companyId/sla-ratio": {
+      "mockFile": "sla-ratio.json",
+      "verbs": [
+        "get"
+      ]
+    },
+    "api/support/db-pools": {
+      "mockFile": "pools.json",
+      "verbs": [
+        "get"
+      ]
+    },
+    "api/files/processing/processors": {
+      "mockFile": "processors.json",
+      "verbs": [
+        "get"
+      ]
+    },
+    "api/companies": {
+      "mockFile": "companies.json",
+      "verbs": [
+        "get"
+      ]
+    },
+    "api/files/processing/stats/companies/:companyId/jobs":{
+      "mockFile": "company_jobs.json",
+      "verbs": [
+        "get"
+      ]
+    },
+    "api/files/processing/stats/companies/:companyId/sla":{
+      "mockFile": "company_metrics_sla.json",
       "verbs": [
         "get"
       ]
