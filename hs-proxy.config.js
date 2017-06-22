@@ -42,13 +42,14 @@ module.exports = {
                         {
                             from: new RegExp('bundle[.].{1,}[.]js'),
                             to: 'bundle.dev.js'
-                        },
-                        {
-                            from: new RegExp('share-employees'),
-                            to: 'modules/share-employees'
                         }
                     ],
                     to: staticOldRedirectHost
+                },
+                {
+                    from: '/apps/dist/modules/.*[.js|.css|.json|.woff2|.woff|.ttf]',
+                    to: staticRedirectHost,
+                    replace: '/'
                 },
                 {
                     from: '/apps/dist/vendor/.*[.js|.css|.json|.woff2|.woff|.ttf]',
