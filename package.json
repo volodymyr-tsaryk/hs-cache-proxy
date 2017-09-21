@@ -13,6 +13,7 @@
   "author": "moro@programmer.net",
   "license": "ISC",
   "dependencies": {
+    "apimocker": "^0.5.1",
     "express": "^4.13.4",
     "filendir": "^1.0.0",
     "http-proxy": "git+https://github.com/moro-programmer/node-http-proxy.git",
