@@ -1,9 +1,16 @@
 var i18Host = 'http://localhost:6060';
-var apiHost = 'http://df-testserver4/';
+var apiHost = 'http://216.166.0.49/'; //df-testserver4
 //var apiHost = 'http://10.1.19.12/';
 var staticHost = 'http://localhost:8080/';
 var staticOldRedirectHost = 'http://localhost:5000';
 var staticRedirectHost = 'http://localhost:6500';
+var bundleHashesToDevReplace = [
+    '/',
+    {
+        from: new RegExp('bundle[.].{1,}[.]js'),
+        to: 'bundle.dev.js'
+    }
+];
 
 module.exports = {
     proxy: {
@@ -22,6 +29,10 @@ module.exports = {
                     to: 'approve-main.js'
                 },
                 {
+                    from: 'new-timeoff-requests.min.master.+.js',
+                    to: 'request-config.js'
+                },
+                {
                     from: 'new-forecast.min.master.+.js',
                     to: 'forecast/forecast.config.js'
                 },
@@ -37,34 +48,28 @@ module.exports = {
                 },
                 {
                     from: '/apps/.*[.js|.css|.json|.woff2|.woff|.ttf]',
-                    replace: [
-                        '/',
-                        {
-                            from: new RegExp('bundle[.].{1,}[.]js'),
-                            to: 'bundle.dev.js'
-                        }
-                    ],
-                    to: staticOldRedirectHost
+                    replace: bundleHashesToDevReplace,
+                    to: staticRedirectHost
                 },
                 {
                     from: '/apps/dist/modules/.*[.js|.css|.json|.woff2|.woff|.ttf]',
                     to: staticRedirectHost,
-                    replace: '/'
+                    replace: bundleHashesToDevReplace,
                 },
                 {
                     from: '/apps/dist/vendor/.*[.js|.css|.json|.woff2|.woff|.ttf]',
                     to: staticRedirectHost,
-                    replace: '/'
+                    replace: bundleHashesToDevReplace,
                 },
                 {
                     from: '/apps/dist/module-launcher/.*[.js|.css|.json|.woff2|.woff|.ttf]',
                     to: staticRedirectHost,
-                    replace: '/'
+                    replace: bundleHashesToDevReplace,
                 },
                 {
                     from: '/templates/green/js/logbook/.*[.js|.css|.json|.woff2|.woff|.ttf]',
-                    replace: '/templates/green/js/logbook/dist/',
-                    to: staticRedirectHost
+                    replace: bundleHashesToDevReplace,
+                    to: staticOldRedirectHost
                 },
                 {
                     from: '/spring/i18n/resources',
