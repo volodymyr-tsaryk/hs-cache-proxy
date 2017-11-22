@@ -1,6 +1,6 @@
 var i18Host = 'http://localhost:6060';
 var apiHost = 'http://216.166.0.49/'; //df-testserver4
-//var apiHost = 'http://10.1.19.12/';
+//var apiHost = 'http://qamaster.eng.hotschedules.com/';
 var staticHost = 'http://localhost:8080/';
 var staticOldRedirectHost = 'http://localhost:5000';
 var staticRedirectHost = 'http://localhost:6500';
@@ -68,6 +68,11 @@ module.exports = {
                 },
                 {
                     from: '/templates/green/js/logbook/.*[.js|.css|.json|.woff2|.woff|.ttf]',
+                    replace: bundleHashesToDevReplace,
+                    to: staticOldRedirectHost
+                },
+                {
+                    from: '/apps/dist/punch-records/.*[.js|.css|.json|.woff2|.woff|.ttf]',
                     replace: bundleHashesToDevReplace,
                     to: staticOldRedirectHost
                 },
