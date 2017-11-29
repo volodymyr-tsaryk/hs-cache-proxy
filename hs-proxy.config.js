@@ -37,6 +37,10 @@ module.exports = {
                     to: 'forecast/forecast.config.js'
                 },
                 {
+                    from: 'startup-page.min.js',
+                    to: 'login/config.js'
+                },                
+                {
                     from: '.*update.js$',
                     replace: '/',
                     to: staticRedirectHost
