@@ -11,6 +11,8 @@ var fs = require('fs'),
     staticExclude = config.proxy.static.exclude,
     staticRemovePrefix = config.proxy.static.removePrefix;
 
+var redirectHostString = '//localhost/hs/';
+
 var staticProxy = httpProxy.createProxyServer({
     timeout: config.proxy.static.requestTimeout
 });
@@ -22,6 +24,15 @@ var dynamicProxy = httpProxy.createProxyServer({
 });
 
 dynamicProxy.on('error', onError);
+
+dynamicProxy.on('proxyRes', function (proxyRes, req, res) {
+    if (proxyRes.statusCode === 302 && proxyRes.headers && proxyRes.headers.location.indexOf(redirectHostString) !== -1) {
+        var newLocation = proxyRes.headers.location.replace(redirectHostString, '//localhost:'+ config.proxy.port +'/hs/');
+        proxyRes.headers['location'] = newLocation;
+    }
+});
+
+
 
 http.createServer(proxyRequest).listen(config.proxy.port);
 

@@ -1,6 +1,6 @@
 var i18Host = 'http://localhost:6060';
-var apiHost = 'http://216.166.0.49/'; //df-testserver4
-//var apiHost = 'http://qamaster.eng.hotschedules.com/';
+//var apiHost = 'http://216.166.0.49/'; //df-testserver4
+var apiHost = 'http://qamaster.eng.hotschedules.com/';
 var staticHost = 'http://localhost:8080/';
 var staticOldRedirectHost = 'http://localhost:5000';
 var staticRedirectHost = 'http://localhost:6500';
