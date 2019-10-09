@@ -86,7 +86,7 @@ module.exports = {
                     to: i18Host
                 }
             ],
-            exclude: ['hotschedules.js', 'jsp/preload'],
+            exclude: ['hotschedules.js', 'hotschedules.css', 'jsp/preload'],
             include: ['.png$|.js$|.cssv$|.woff$|.css$|i18n/resources|.svg$|.jpg$|.gif$|.html$|.ttf|.ico$|.tpl$|.json$|.woff2$']
         },
         dynamic: {
