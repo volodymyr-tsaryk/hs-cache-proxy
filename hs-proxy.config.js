@@ -28,7 +28,7 @@ module.exports = {
                 },
                 {
                     from: 'templates/green/js/scheduling.min.js',
-                    to: 'backbone/scheduling/config.js'
+                    to: 'backbone/scheduling/config.development.js'
                 },
                 {
                     from: 'new-timeoff-approvals.min.master.+.js',
