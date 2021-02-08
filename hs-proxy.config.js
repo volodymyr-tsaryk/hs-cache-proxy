@@ -5,6 +5,8 @@ var apiHost = 'http://qamaster.eng.hotschedules.com/';
 var staticHost = 'http://localhost:8080/';
 var staticOldRedirectHost = 'http://localhost:5000';
 var staticRedirectHost = 'http://localhost:6500';
+var dist16RedirectHost = 'http://localhost:6501';
+
 var bundleHashesToDevReplace = [
     '/',
     {
@@ -65,6 +67,11 @@ module.exports = {
                     from: '/apps/dist/modules/.*[.js|.css|.json|.woff2|.woff|.ttf]',
                     to: staticRedirectHost,
                     replace: bundleHashesToDevReplace,
+                },
+                {
+                    from: "/apps/dist16.*[.js|.css|.json|.woff2|.woff|.ttf]",
+                    replace: bundleHashesToDevReplace,
+                    to: dist16RedirectHost
                 },
                 {
                     from: '/apps/dist/vendor/.*[.js|.css|.json|.woff2|.woff|.ttf]',
