@@ -2,6 +2,7 @@ var i18Host = 'http://localhost:6060';
 //var apiHost = 'http://216.166.0.49/'; //df-testserver4
 var apiHost = 'http://qamaster.eng.hotschedules.com/';
 //var apiHost = 'http://qareleased.eng.hotschedules.com/';
+//var apiHost = 'http://beta2.hotschedules.com/';
 var staticHost = 'http://localhost:8080/';
 var staticOldRedirectHost = 'http://localhost:5000';
 var staticRedirectHost = 'http://localhost:6500';
@@ -33,12 +34,16 @@ module.exports = {
                     to: 'backbone/scheduling/config.development.js'
                 },
                 {
-                    from: 'new-timeoff-approvals.min.master.+.js',
-                    to: 'approve-main.js'
+                    from: 'templates/green/js/rosterReport.min.js',
+                    to: 'backbone/report/config.development.js'
                 },
                 {
-                    from: 'new-timeoff-requests.min.master.+.js',
-                    to: 'request-config.js'
+                    from: 'templates/default/js/newTimeOff/new-timeoff-approvals.min.master.+.js',
+                    to: 'backbone/newTimeOff/approve/approve-main.dev.js'
+                },
+                {
+                    from: 'templates/default/js/newTimeOff/new-timeoff-requests.min.master.+.js',
+                    to: 'backbone/newTimeOff/request/request-config.dev.js'
                 },
                 {
                     from: 'templates/green/js/new-forecast.min.master.+.js',
