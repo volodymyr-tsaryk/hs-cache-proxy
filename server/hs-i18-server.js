@@ -6,8 +6,10 @@ var
 var server = express();
 
 server.all('/*', function(req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'X-Requested-With');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'origin, content-type, accept, x-requested-with, Authorization, X-Scheme, X-CSRFToken, X-XSRF-TOKEN');
   next();
 });
 
